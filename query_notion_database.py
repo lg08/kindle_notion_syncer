@@ -1,8 +1,11 @@
 import requests
 import json
 
+database_ID = os.environ.get("database_ID")
+secret_Key = os.environ.get("secret_Key")
+
 def get_pageid_for_title(title):
-    url = "https://api.notion.com/v1/databases/92ddb91bf7764f2cb137a179017055ae/query"
+    url = f"https://api.notion.com/v1/databases/{database_ID}/query"
     payload = {
         "page_size": 100,
         "filter": {
@@ -16,7 +19,7 @@ def get_pageid_for_title(title):
         "Accept": "application/json",
         "Notion-Version": "2022-02-22",
         "Content-Type": "application/json",
-        "Authorization": "Bearer secret_QsUhiCfc8EtIzCJTJmrZZjOadGT8PkdoUuGSJDakDBR"
+        "Authorization": f"Bearer {secret_Key}"
     }
 
     response = requests.post(url, json=payload, headers=headers)
@@ -41,7 +44,7 @@ def get_list_of_paragraphs_for_page_with_title(title):
     headers = {
         "Accept": "application/json",
         "Notion-Version": "2022-02-22",
-        "Authorization": "Bearer secret_QsUhiCfc8EtIzCJTJmrZZjOadGT8PkdoUuGSJDakDBR"
+        "Authorization": f"Bearer {secret_Key}"
     }
 
     response = requests.get(url, headers=headers)
@@ -49,12 +52,14 @@ def get_list_of_paragraphs_for_page_with_title(title):
     paragraphs = []
     data = json.loads(response.text)
     for item in data['results']:
+        print("ITEM")
+        print(item)
         stringer = ""
         try:
-            item['paragraph']
+            item['quote']
         except:
             continue
-        for words in item['paragraph']['rich_text']:
+        for words in item['quote']['rich_text']:
             stringer += words['plain_text']
         paragraphs.append(stringer)
 
@@ -65,17 +70,29 @@ def append_items_to_page(title, items):
     children_array = []
     for item in items:
         children_array.append(
+            #{
+            #    "type": "paragraph",
+            #    "paragraph": {
+            #        "rich_text": [{
+            #            "type": "text",
+            #            "text": {
+            #                "content": item,
+            #                "link": None
+            #            }
+            #        }],
+            #        "color": "default",
+            #    }
+            #}
             {
-                "type": "paragraph",
-                "paragraph": {
+                "type": "quote",
+                "quote": {
                     "rich_text": [{
                         "type": "text",
                         "text": {
                             "content": item,
-                            "link": None
-                        }
+                        },
                     }],
-                    "color": "default",
+                    "color": "default"
                 }
             }
         )
@@ -91,7 +108,7 @@ def append_items_to_page(title, items):
         "Accept": "application/json",
         "Notion-Version": "2022-02-22",
         "Content-Type": "application/json",
-        "Authorization": "Bearer secret_QsUhiCfc8EtIzCJTJmrZZjOadGT8PkdoUuGSJDakDBR"
+        "Authorization": f"Bearer {secret_Key}"
     }
 
     response = requests.patch(url, json=payload, headers=headers)
@@ -105,17 +122,29 @@ def create_page(title, author, paragraph_list):
     children_list = []
     for text in paragraph_list:
         children_list.append(
+            #{
+            #    "type": "paragraph",
+            #    "paragraph": {
+            #        "rich_text": [{
+            #            "type": "text",
+            #            "text": {
+            #                "content": text,
+            #                "link": None
+            #            }
+            #        }],
+            #        "color": "default",
+            #    }
+            #}
             {
-                "type": "paragraph",
-                "paragraph": {
+                "type": "quote",
+                "quote": {
                     "rich_text": [{
                         "type": "text",
                         "text": {
-                            "content": text,
-                            "link": None
-                        }
+                            "content":text,
+                        },
                     }],
-                    "color": "default",
+                    "color": "default"
                 }
             }
         )
@@ -124,7 +153,7 @@ def create_page(title, author, paragraph_list):
         "children": children_list ,
         "parent": {
             "type": "database_id",
-            "database_id": "92ddb91bf7764f2cb137a179017055ae"
+            "database_id": database_ID
         },
         "properties": {
             "Name": {
@@ -153,7 +182,7 @@ def create_page(title, author, paragraph_list):
         "Accept": "application/json",
         "Notion-Version": "2022-02-22",
         "Content-Type": "application/json",
-        "Authorization": "Bearer secret_QsUhiCfc8EtIzCJTJmrZZjOadGT8PkdoUuGSJDakDBR"
+        "Authorization": f"Bearer {secret_Key}"
     }
 
     response = requests.post(url, json=payload, headers=headers)
