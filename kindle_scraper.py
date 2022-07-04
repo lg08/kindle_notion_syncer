@@ -75,7 +75,10 @@ def get_highlights(email, password):
 
         highlights = []
         highlight_text = []
-        highlights = driver.find_elements(By.XPATH, "//span[contains(@id, 'highlight')]")
+        highlights = driver.find_elements(
+            By.XPATH, 
+            "//span[@id='highlight' or @id='note']"
+        )
 
         # options = []
         # options = driver.find_elements(By.XPATH, "//a[text()='Options']")
@@ -87,9 +90,12 @@ def get_highlights(email, password):
         #     print(link)
 
         # skip the first one since it's just a number
-        for highlight in highlights[1:]:
-            highlight_text.append(highlight.text)
-        
+        for highlight in highlights:
+            if highlight.text != "":
+                if highlight.get_attribute("id") == "highlight":
+                    highlight_text.append((highlight.text, "highlight"))
+                else:
+                    highlight_text.append((highlight.text, "note"))
         book_highlights[title] = {
             "highlights": highlight_text,
             "author": author,

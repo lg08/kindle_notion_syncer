@@ -28,6 +28,8 @@ def get_pageid_for_title(title):
     # print(response.text)
 
     data = json.loads(response.text)
+    print("RIGHT BEFORE RESULSTS-----------------")
+    print(data)
     if len(data['results']) == 0:
         return None
     page_id = data['results'][0]['id']
@@ -53,57 +55,61 @@ def get_list_of_paragraphs_for_page_with_title(title):
     paragraphs = []
     data = json.loads(response.text)
     for item in data['results']:
-        print("ITEM")
-        print(item)
-        stringer = ""
-        try:
-            item['quote']
-        except:
-            continue
-        for words in item['quote']['rich_text']:
-            stringer += words['plain_text']
+        if 'quote' in item.keys():
+            for words in item['quote']['rich_text']:
+                stringer = (words['plain_text'], "highlight")
+        elif 'callout' in item.keys():
+            for words in item['callout']['rich_text']:
+                stringer = (words['plain_text'], "note")
+
         paragraphs.append(stringer)
 
     return paragraphs
 
 
 def append_items_to_page(title, items):
-    children_array = []
+    children_list = []
     for item in items:
-        children_array.append(
-            #{
-            #    "type": "paragraph",
-            #    "paragraph": {
-            #        "rich_text": [{
-            #            "type": "text",
-            #            "text": {
-            #                "content": item,
-            #                "link": None
-            #            }
-            #        }],
-            #        "color": "default",
-            #    }
-            #}
-            {
-                "type": "quote",
-                "quote": {
-                    "rich_text": [{
-                        "type": "text",
-                        "text": {
-                            "content": item,
-                        },
-                    }],
-                    "color": "default"
+        if item[1] == "highlight":
+            children_list.append(
+                {
+                    "type": "quote",
+                    "quote": {
+                        "rich_text": [{
+                            "type": "text",
+                            "text": {
+                                "content":item[0],
+                            },
+                        }],
+                        "color": "default"
+                    }
                 }
-            }
-        )
+            )
+        else:
+            children_list.append(
+                {
+                    "type": "callout",
+                    "callout": {
+                        "rich_text": [{
+                            "type": "text",
+                            "text": {
+                                "content":item[0],
+                            },
+                        }],
+                        "icon": {
+                            "emoji": "⭐"
+                        },
+                        "color": "default"
+                    }
+                }
+            )
 
     page_id = get_pageid_for_title(title)
 
     url = f"https://api.notion.com/v1/blocks/{page_id}/children"
 
     payload = {
-        "children": children_array
+        "children": children_list
     }
     headers = {
         "Accept": "application/json",
@@ -122,33 +128,40 @@ def create_page(title, author, paragraph_list):
     url = "https://api.notion.com/v1/pages"
     children_list = []
     for text in paragraph_list:
-        children_list.append(
-            #{
-            #    "type": "paragraph",
-            #    "paragraph": {
-            #        "rich_text": [{
-            #            "type": "text",
-            #            "text": {
-            #                "content": text,
-            #                "link": None
-            #            }
-            #        }],
-            #        "color": "default",
-            #    }
-            #}
-            {
-                "type": "quote",
-                "quote": {
-                    "rich_text": [{
-                        "type": "text",
-                        "text": {
-                            "content":text,
-                        },
-                    }],
-                    "color": "default"
+        if text[1] == "highlight":
+            children_list.append(
+                {
+                    "type": "quote",
+                    "quote": {
+                        "rich_text": [{
+                            "type": "text",
+                            "text": {
+                                "content":text[0],
+                            },
+                        }],
+                        "color": "default"
+                    }
                 }
-            }
-        )
+            )
+        else:
+            children_list.append(
+                {
+                    "type": "callout",
+                    "callout": {
+                        "rich_text": [{
+                            "type": "text",
+                            "text": {
+                                "content":text[0],
+                            },
+                        }],
+                        "icon": {
+                            "emoji": "⭐"
+                        },
+                        "color": "default"
+                    }
+                }
+            )
+
 
     payload = {
         "children": children_list ,
@@ -188,9 +201,3 @@ def create_page(title, author, paragraph_list):
 
     response = requests.post(url, json=payload, headers=headers)
 
-# print("create_page")
-# create_page(
-#     "The Serpent in the Glass: A Middle Grade Fantasy for Children and Adults Alike (The Tale of Thomas Farrell Book 1)",
-#     "D.M. Andrews",
-#     ['test quote', 'other thing']
-#             )
