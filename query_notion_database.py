@@ -114,7 +114,7 @@ def append_items_to_page(title, items):
 
     response = requests.patch(url, json=payload, headers=headers)
 
-    print(response.text)
+    #print(response.text)
 
 
 
@@ -188,3 +188,9 @@ def create_page(title, author, paragraph_list):
 
     response = requests.post(url, json=payload, headers=headers)
 
+# print("create_page")
+# create_page(
+#     "The Serpent in the Glass: A Middle Grade Fantasy for Children and Adults Alike (The Tale of Thomas Farrell Book 1)",
+#     "D.M. Andrews",
+#     ['test quote', 'other thing']
+#             )

@@ -18,11 +18,11 @@ def get_highlights(email, password):
 
     chrome_options.add_argument("--no-sandbox")
 
-    # DRIVER_PATH = '/Users/lucasgen/Downloads/chromedriver'
-    # driver = webdriver.Chrome(executable_path=DRIVER_PATH, options=chrome_options)
+    DRIVER_PATH = '/Users/lucasgen/Downloads/chromedriver'
+    driver = webdriver.Chrome(executable_path=DRIVER_PATH, options=chrome_options)
 
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+    # chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    # driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
 
     print("getting driver---------------")
@@ -76,6 +76,15 @@ def get_highlights(email, password):
         highlights = []
         highlight_text = []
         highlights = driver.find_elements(By.XPATH, "//span[contains(@id, 'highlight')]")
+
+        # options = []
+        # options = driver.find_elements(By.XPATH, "//a[text()='Options']")
+        # for option in options:
+        #     option.click()
+        #     link = driver.find_element(By.XPATH, "//a[text()='Open in Kindle']")
+        #     link = link.get_attribute("href")
+        #     print("LINK--------------------")
+        #     print(link)
 
         # skip the first one since it's just a number
         for highlight in highlights[1:]:
