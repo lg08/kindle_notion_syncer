@@ -18,11 +18,11 @@ def get_highlights(email, password):
 
     chrome_options.add_argument("--no-sandbox")
 
-    DRIVER_PATH = '/Users/lucasgen/Downloads/chromedriver'
-    driver = webdriver.Chrome(executable_path=DRIVER_PATH, options=chrome_options)
+    # DRIVER_PATH = '/Users/lucasgen/Downloads/chromedriver'
+    # driver = webdriver.Chrome(executable_path=DRIVER_PATH, options=chrome_options)
 
-    # chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    # driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
 
     print("getting driver---------------")
