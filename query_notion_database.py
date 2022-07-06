@@ -10,7 +10,7 @@ def get_pageid_for_title(title):
     payload = {
         "page_size": 100,
         "filter": {
-            "property": "Name",
+            "property": "Title",
             "rich_text": {
                 "equals": title
             }
@@ -170,7 +170,7 @@ def create_page(title, author, paragraph_list):
             "database_id": database_ID
         },
         "properties": {
-            "Name": {
+            "Title": {
                 "title": [
                     {
                         "type": "text",
