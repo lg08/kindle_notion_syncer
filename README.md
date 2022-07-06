@@ -1,8 +1,10 @@
 # Github Readme Kindle Syncer
 
-# Automatic Kindle-Notion Syncer
+Note: to view this readme as a notion page, go here: https://www.notion.so/Github-Readme-Kindle-Syncer-4b186de0161c4ec9a22f8b5971a8aaa1
 
-# What does this app do?
+^^ This is recommended since it has a little better formatting for images and such.
+
+## What does this app do?
 
 Great question! 
 
