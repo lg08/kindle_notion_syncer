@@ -165,6 +165,12 @@ def create_page(title, author, paragraph_list):
 
     payload = {
         "children": children_list ,
+        "icon": {
+            "type": "external",
+            "external": {
+                "url": "https://yoolk.ninja/wp-content/uploads/2020/06/Apps-Kindle-1024x1024.png"
+            }
+        },
         "parent": {
             "type": "database_id",
             "database_id": database_ID
@@ -186,6 +192,31 @@ def create_page(title, author, paragraph_list):
                         "type": "text",
                         "text": {
                             "content": author
+                        }
+                    },
+                ]
+            },
+            "Medium": {
+                "select": {
+                    "name": "Books"
+                }
+            },
+            "Category": {
+                "select": {
+                    "name": "UNCATEGORIZED"
+                }
+            },
+            "Project": {
+                "select": {
+                    "name": "UNORGANIZED"
+                }
+            },
+            "Summary": {
+                "rich_text": [
+                    {
+                        "type": "text",
+                        "text": {
+                            "content": "Book from Kindle"
                         }
                     },
                 ]
