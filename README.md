@@ -1,4 +1,4 @@
-# Github Readme Kindle Syncer
+# Github Readme Kindle Syncer (THIS IS DISBANDED)
 
 Note: to view the installation instructions, go here: https://www.notion.so/Github-Readme-Kindle-Syncer-4b186de0161c4ec9a22f8b5971a8aaa1
 
